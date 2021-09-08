@@ -1,0 +1,129 @@
+@font-face {
+  font-family: "Montserrat";
+  src: url(./fonts/Montserrat-Regular.otf);
+}
+
+html,
+body,
+#map {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+.leaflet-popup-content {
+  margin: 0;
+  width: 300px;
+}
+.leaflet-popup-content img {
+  width: 100%;
+  border-radius: 12px 12px 0 0;
+}
+.leaflet-popup-content h2,
+.leaflet-popup-content p {
+  margin: 5px 10px;
+}
+.leaflet-popup-content-wrapper {
+  padding: 0 0 10px 0;
+}
+svg.leaflet-zoom-animated path.leaflet-interactive {
+  animation: blinking 1.5s infinite ease;
+}
+
+body {
+  font-family: "Montserrat";
+}
+
+@keyframes blinking {
+  20% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  80% {
+    opacity: 1;
+  }
+}
+
+.my_controls {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100000;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.select_locations h1,
+.select_locations h2,
+.select_locations h3,
+.select_locations h4,
+.select_locations h5,
+.select_locations h6 {
+  font-weight: 600;
+  text-align: center;
+  color: rgb(0, 0, 0);
+  /* color: #14a631; */
+}
+
+.select_locations {
+  padding: 0 32px 12px 32px;
+  background-color: rgb(238, 238, 238);
+  font-size: 16px;
+  border-radius: 6.5px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.582);
+}
+
+.select_locations select,
+.select_locations button {
+  font: inherit;
+}
+
+.select_locations .buttonContainer {
+  text-align: right;
+}
+
+.select_locations button {
+  background-color: #14a631;
+  border: none;
+  color: white;
+  padding: 3px 13px;
+  border-radius: 3px;
+}
+.select_locations select {
+  background-color: rgb(230, 230, 230);
+  border: #14a631a4 solid;
+  border-width: 0 0 3px 0;
+  color: inherit;
+  padding: 3px 6.5px;
+}
+
+button.directions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 10000;
+  left: 0;
+  bottom: 0;
+  border: 0px;
+  border-radius: 500px;
+  padding: 0;
+  background-color: transparent;
+  margin: 10px;
+  cursor: pointer;
+  width: 10vh;
+  height: 10vh;
+  min-width: 50px;
+  min-height: 50px;
+}
+
+button.directions img {
+  width: 100%;
+}

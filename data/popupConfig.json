@@ -1,0 +1,132 @@
+{
+  "admin": {
+    "fullName": "Administration Block",
+    "image": "admin.jpg",
+    "description": "Here can be found most of the staff offices"
+  },
+  "quadrangle": {
+    "fullName": "Quadrangle",
+    "image": "quad.jpg",
+    "description": ""
+  },
+  "auditorium": {
+    "fullName": "Main Auditorium",
+    "image": "",
+    "description": ""
+  },
+  "soccer": {
+    "fullName": "Football Pitch",
+    "image": "",
+    "description": ""
+  },
+  "basketball": {
+    "fullName": "Basketball Court",
+    "image": "",
+    "description": ""
+  },
+  "volleyball": {
+    "fullName": "Volleyball Court",
+    "image": "",
+    "description": ""
+  },
+  "camp": {
+    "fullName": "Chinese Camp",
+    "image": "",
+    "description": "Officially called the \"Extension wing\", other hostels are located here"
+  },
+  "workshop": {
+    "fullName": "Workshop",
+    "image": "",
+    "description": ""
+  },
+  "gate entrance": {
+    "fullName": "Gate Entrance",
+    "image": "",
+    "description": ""
+  },
+  "gate exit": {
+    "fullName": "Gate exit",
+    "image": "",
+    "description": ""
+  },
+  "library": {
+    "fullName": "Library",
+    "image": "library.jpg",
+    "description": ""
+  },
+  "clinic": {
+    "fullName": "School Clinic",
+    "image": "",
+    "description": ""
+  },
+  "classroom block A": {
+    "fullName": "Classroom Block A",
+    "image": "A.jpg",
+    "description": ""
+  },
+  "classroom block B": {
+    "fullName": "Classroom Block B",
+    "image": "classes.jpg",
+    "description": ""
+  },
+  "classroom block C": {
+    "fullName": "Classroom Block C",
+    "image": "classes.jpg",
+    "description": ""
+  },
+  "classroom block D": {
+    "fullName": "Classroom Block D",
+    "image": "classes.jpg",
+    "description": "Mostly laboratories are located here"
+  },
+  "cafeteria": {
+    "fullName": "Cafeteria",
+    "image": "cafe.jpg",
+    "description": ""
+  },
+  "hall 4": {
+    "fullName": "Hall 4",
+    "image": "hostel.jpg",
+    "description": "Hostel"
+  },
+  "hall 3": {
+    "fullName": "Hall 3",
+    "image": "hostel.jpg",
+    "description": "Hostel"
+  },
+  "hall 2": {
+    "fullName": "Hall 2",
+    "image": "east-halls.jpg",
+    "description": "Hostel"
+  },
+  "hall 1": {
+    "fullName": "Hall 1",
+    "image": "east-halls.jpg",
+    "description": "Hostel"
+  },
+  "hall 5": {
+    "fullName": "Hall 5",
+    "image": "east-halls.jpg",
+    "description": "Hostel"
+  },
+  "hall 6": {
+    "fullName": "Hall 6",
+    "image": "east-halls.jpg",
+    "description": "Hostel"
+  },
+  "hall 7": {
+    "fullName": "Hall 7",
+    "image": "hostel.jpg",
+    "description": "Hostel"
+  },
+  "hall 8": {
+    "fullName": "Hall 8",
+    "image": "hostel.jpg",
+    "description": "Hostel"
+  },
+  "bus stop": {
+    "fullName": "Minibus Stop",
+    "image": "",
+    "description": ""
+  }
+}
