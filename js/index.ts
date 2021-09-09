@@ -34,11 +34,11 @@ async function main() {
   });
 
   const geojsonData: verticesDataFormat = JSON.parse(
-    await fetch("../data/vertices.geojson").then((res) => res.text())
+    await fetch("./data/vertices.geojson").then((res) => res.text())
   );
 
   const popupConfigData = JSON.parse(
-    await fetch("../data/popupConfig.json").then((res) => res.text())
+    await fetch("./data/popupConfig.json").then((res) => res.text())
   );
 
   type PopupConfigDataValue = {

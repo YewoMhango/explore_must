@@ -94,11 +94,11 @@ function main() {
                         zoom: 17,
                     });
                     _b = (_a = JSON).parse;
-                    return [4 /*yield*/, fetch("../data/vertices.geojson").then(function (res) { return res.text(); })];
+                    return [4 /*yield*/, fetch("./data/vertices.geojson").then(function (res) { return res.text(); })];
                 case 1:
                     geojsonData = _b.apply(_a, [_e.sent()]);
                     _d = (_c = JSON).parse;
-                    return [4 /*yield*/, fetch("../data/popupConfig.json").then(function (res) { return res.text(); })];
+                    return [4 /*yield*/, fetch("./data/popupConfig.json").then(function (res) { return res.text(); })];
                 case 2:
                     popupConfigData = _d.apply(_c, [_e.sent()]);
                     namedLocations = geojsonData.features.filter(function (val) { return val.properties.name !== null; });
