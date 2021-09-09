@@ -103,6 +103,26 @@ body {
   padding: 3px 6.5px;
 }
 
+@media screen and (min-height: 700px) {
+  .select_locations {
+    padding: 0 55px 20px 55px;
+    background-color: rgb(238, 238, 238);
+    font-size: 32px;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.582);
+  }
+
+  .select_locations button {
+    padding: 8px 20px;
+    border-radius: 8px;
+  }
+
+  .select_locations select {
+    border-width: 0 0 8px 0;
+    padding: 8px 16px;
+  }
+}
+
 button.directions {
   display: flex;
   flex-direction: row;
