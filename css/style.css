@@ -22,13 +22,13 @@ body,
 }
 @keyframes shimering {
   0% {
-    background-color: #dddddd;
+    background-color: #ccc;
   }
   50% {
-    background-color: #eeeeee;
+    background-color: #eee;
   }
   100% {
-    background-color: #dddddd;
+    background-color: #ccc;
   }
 }
 .leaflet-popup-content h2,
