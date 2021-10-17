@@ -62,7 +62,7 @@ async function main() {
     ]).bindPopup(
       `<img src="./images/${
         image == "" ? "no picture yet.svg" : image
-      }"><h2>${fullName}</h2><p>${description}</p>`
+      }" alt="Malawi University of Science and Technology (MUST) ${fullName}"><h2>${fullName}</h2><p>${description}</p>`
     );
   });
 
@@ -159,7 +159,7 @@ async function main() {
 
                 if (fromSelector.value == "gps") {
                   if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
+                    navigator.geolocation.watchPosition(
                       (position) => {
                         if (
                           Number.isNaN(position.coords.latitude) ||
@@ -193,6 +193,11 @@ async function main() {
                       (error) => {
                         alert("Geolocation failed: " + error.message);
                         console.log(error);
+                      }, 
+                      {
+                        enableHighAccuracy: true,
+                        maximumAge: 30000,
+                        timeout: 27000
                       }
                     );
                   } else {
