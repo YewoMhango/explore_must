@@ -107,7 +107,7 @@ function main() {
                         return L.marker([
                             value.geometry.coordinates[1],
                             value.geometry.coordinates[0],
-                        ]).bindPopup("<img src=\"./images/" + (image == "" ? "no picture yet.svg" : image) + "\" alt=\"Malawi University of Science and Technology (MUST) " + fullName + "\"><h2>" + fullName + "</h2><p>" + description + "</p>");
+                        ]).bindPopup("<img src=\"./images/" + (image == "" ? "no picture yet.svg" : image) + "\"><h2>" + fullName + "</h2><p>" + description + "</p>");
                     });
                     console.log(importantLocations);
                     L.tileLayer("http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}", {
