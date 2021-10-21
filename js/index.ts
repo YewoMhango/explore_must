@@ -134,6 +134,8 @@ async function main() {
     )
   ) as HTMLSelectElement;
 
+  let gpsWatchIds: Array<number> = [];
+
   let locationSelectorOverlay = create(
     "div",
     {
@@ -155,50 +157,67 @@ async function main() {
             create("button", {
               innerText: "Show",
               onclick: () => {
-                pathLayerGroup.clearLayers();
+                if (gpsWatchIds.length > 0) {
+                  for (let id of gpsWatchIds) {
+                    navigator.geolocation.clearWatch(id);
+                  }
+                  gpsWatchIds = [];
+                }
+
+                let watchCallbackCount = 0;
 
                 if (fromSelector.value == "gps") {
                   if (navigator.geolocation) {
-                    navigator.geolocation.watchPosition(
-                      (position) => {
-                        if (
-                          Number.isNaN(position.coords.latitude) ||
-                          Number.isNaN(position.coords.longitude)
-                        ) {
-                          alert("Failed to get current location");
-                          return;
-                        }
+                    gpsWatchIds.push(
+                      navigator.geolocation.watchPosition(
+                        (position) => {
+                          if (
+                            Number.isNaN(position.coords.latitude) ||
+                            Number.isNaN(position.coords.longitude)
+                          ) {
+                            alert("Failed to get current location");
+                            return;
+                          }
 
-                        let fromPoint = findNearestPoint(
-                          position.coords.latitude,
-                          position.coords.longitude
-                        );
-
-                        if (fromPoint.distance > 0.0045) {
-                          alert(
-                            "You're too far away from MUST, so the result may be meaningless"
+                          let fromPoint = findNearestPoint(
+                            position.coords.latitude,
+                            position.coords.longitude
                           );
+
+                          if (
+                            fromPoint.distance > 0.0045 &&
+                            watchCallbackCount == 0
+                          ) {
+                            alert(
+                              "You're too far away from MUST, so the result may be meaningless"
+                            );
+                          }
+
+                          console.log(position);
+                          console.log(fromPoint);
+
+                          let from = fromPoint.id;
+                          let to = Number(toSelector.value);
+
+                          if (!Number.isNaN(from) && !Number.isNaN(to)) {
+                            console.log(watchCallbackCount);
+                            calculateShortestPath(
+                              from,
+                              to,
+                              watchCallbackCount++ == 0
+                            );
+                            console.log(watchCallbackCount);
+                          }
+                        },
+                        (error) => {
+                          alert("Geolocation failed: " + error.message);
+                          console.log(error);
+                        },
+                        {
+                          enableHighAccuracy: true,
+                          maximumAge: 30000,
                         }
-
-                        console.log(position);
-                        console.log(fromPoint);
-
-                        let from = fromPoint.id;
-                        let to = Number(toSelector.value);
-
-                        if (!Number.isNaN(from) && !Number.isNaN(to)) {
-                          calculateShortestPath(from, to);
-                        }
-                      },
-                      (error) => {
-                        alert("Geolocation failed: " + error.message);
-                        console.log(error);
-                      }, 
-                      {
-                        enableHighAccuracy: true,
-                        maximumAge: 30000,
-                        timeout: 27000
-                      }
+                      )
                     );
                   } else {
                     alert("Geolocation is not supported by this browser.");
@@ -210,9 +229,11 @@ async function main() {
                   let to = Number(toSelector.value);
 
                   if (!Number.isNaN(from) && !Number.isNaN(to)) {
-                    calculateShortestPath(from, to);
+                    calculateShortestPath(from, to, true);
                   }
                 }
+
+                locationSelectorOverlay.style.display = "none";
               },
             }),
           ]),
@@ -237,7 +258,13 @@ async function main() {
     )
   );
 
-  function calculateShortestPath(from: number, to: number) {
+  function calculateShortestPath(
+    from: number,
+    to: number,
+    zoomToLine: boolean
+  ) {
+    pathLayerGroup.clearLayers();
+
     let shortestPath = dijkstra(allVertices, from, to).map((value) => [
       value.y,
       value.x,
@@ -248,13 +275,32 @@ async function main() {
       weight: 4,
     });
 
+    let destination = allVertices.find((v) => v.id == to) as Vertex;
+
+    let circle1 = L.circle([destination.y, destination.x], {
+      color: "transparent",
+      fillColor: "red",
+      fillOpacity: 0.6,
+      radius: 5,
+    });
+
+    let circle2 = L.circle([destination.y, destination.x], {
+      color: "transparent",
+      fillColor: "red",
+      fillOpacity: 0.5,
+      radius: 8,
+    });
+
     layersControl.removeLayer(pathLayerGroup);
 
     pathLayerGroup.addLayer(polyline);
+    pathLayerGroup.addLayer(circle1);
+    pathLayerGroup.addLayer(circle2);
     layersControl.addOverlay(pathLayerGroup, "Suggested Path");
 
-    map.fitBounds(polyline.getBounds());
-    locationSelectorOverlay.style.display = "none";
+    if (zoomToLine) {
+      map.fitBounds(polyline.getBounds());
+    }
   }
 
   function findNearestPoint(lat: number, long: number) {

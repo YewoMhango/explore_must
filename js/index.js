@@ -53,7 +53,8 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
 };
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        function calculateShortestPath(from, to) {
+        function calculateShortestPath(from, to, zoomToLine) {
+            pathLayerGroup.clearLayers();
             var shortestPath = dijkstra(allVertices, from, to).map(function (value) { return [
                 value.y,
                 value.x,
@@ -62,11 +63,27 @@ function main() {
                 color: "red",
                 weight: 4,
             });
+            var destination = allVertices.find(function (v) { return v.id == to; });
+            var circle1 = L.circle([destination.y, destination.x], {
+                color: "transparent",
+                fillColor: "red",
+                fillOpacity: 0.6,
+                radius: 5,
+            });
+            var circle2 = L.circle([destination.y, destination.x], {
+                color: "transparent",
+                fillColor: "red",
+                fillOpacity: 0.5,
+                radius: 8,
+            });
             layersControl.removeLayer(pathLayerGroup);
             pathLayerGroup.addLayer(polyline);
+            pathLayerGroup.addLayer(circle1);
+            pathLayerGroup.addLayer(circle2);
             layersControl.addOverlay(pathLayerGroup, "Suggested Path");
-            map.fitBounds(polyline.getBounds());
-            locationSelectorOverlay.style.display = "none";
+            if (zoomToLine) {
+                map.fitBounds(polyline.getBounds());
+            }
         }
         function findNearestPoint(lat, long) {
             var min = {
@@ -85,7 +102,7 @@ function main() {
             }
             return min;
         }
-        var map, geojsonData, _a, _b, popupConfigData, _c, _d, namedLocations, importantLocations, layer, layersControl, allVertices, pathLayerGroup, fromSelector, toSelector, locationSelectorOverlay;
+        var map, geojsonData, _a, _b, popupConfigData, _c, _d, namedLocations, importantLocations, layer, layersControl, allVertices, pathLayerGroup, fromSelector, toSelector, gpsWatchIds, locationSelectorOverlay;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
@@ -146,6 +163,7 @@ function main() {
                             value: value.properties.id,
                         });
                     }));
+                    gpsWatchIds = [];
                     locationSelectorOverlay = create("div", {
                         className: "my_controls",
                         onclick: function () { return (locationSelectorOverlay.style.display = "none"); },
@@ -161,17 +179,25 @@ function main() {
                                 create("button", {
                                     innerText: "Show",
                                     onclick: function () {
-                                        pathLayerGroup.clearLayers();
+                                        if (gpsWatchIds.length > 0) {
+                                            for (var _i = 0, gpsWatchIds_1 = gpsWatchIds; _i < gpsWatchIds_1.length; _i++) {
+                                                var id = gpsWatchIds_1[_i];
+                                                navigator.geolocation.clearWatch(id);
+                                            }
+                                            gpsWatchIds = [];
+                                        }
+                                        var watchCallbackCount = 0;
                                         if (fromSelector.value == "gps") {
                                             if (navigator.geolocation) {
-                                                navigator.geolocation.watchPosition(function (position) {
+                                                gpsWatchIds.push(navigator.geolocation.watchPosition(function (position) {
                                                     if (Number.isNaN(position.coords.latitude) ||
                                                         Number.isNaN(position.coords.longitude)) {
                                                         alert("Failed to get current location");
                                                         return;
                                                     }
                                                     var fromPoint = findNearestPoint(position.coords.latitude, position.coords.longitude);
-                                                    if (fromPoint.distance > 0.0045) {
+                                                    if (fromPoint.distance > 0.0045 &&
+                                                        watchCallbackCount == 0) {
                                                         alert("You're too far away from MUST, so the result may be meaningless");
                                                     }
                                                     console.log(position);
@@ -179,16 +205,17 @@ function main() {
                                                     var from = fromPoint.id;
                                                     var to = Number(toSelector.value);
                                                     if (!Number.isNaN(from) && !Number.isNaN(to)) {
-                                                        calculateShortestPath(from, to);
+                                                        console.log(watchCallbackCount);
+                                                        calculateShortestPath(from, to, watchCallbackCount++ == 0);
+                                                        console.log(watchCallbackCount);
                                                     }
                                                 }, function (error) {
                                                     alert("Geolocation failed: " + error.message);
                                                     console.log(error);
                                                 }, {
-                                                  enableHighAccuracy: true,
-                                                  maximumAge: 30000,
-                                                  timeout: 27000
-                                                });
+                                                    enableHighAccuracy: true,
+                                                    maximumAge: 30000,
+                                                }));
                                             }
                                             else {
                                                 alert("Geolocation is not supported by this browser.");
@@ -199,9 +226,10 @@ function main() {
                                             var from = Number(fromSelector.value);
                                             var to = Number(toSelector.value);
                                             if (!Number.isNaN(from) && !Number.isNaN(to)) {
-                                                calculateShortestPath(from, to);
+                                                calculateShortestPath(from, to, true);
                                             }
                                         }
+                                        locationSelectorOverlay.style.display = "none";
                                     },
                                 }),
                             ]),
