@@ -281,14 +281,14 @@ async function main() {
       color: "transparent",
       fillColor: "red",
       fillOpacity: 0.6,
-      radius: 5,
+      radius: 4,
     });
 
     let circle2 = L.circle([destination.y, destination.x], {
       color: "transparent",
       fillColor: "red",
       fillOpacity: 0.5,
-      radius: 8,
+      radius: 6,
     });
 
     layersControl.removeLayer(pathLayerGroup);
