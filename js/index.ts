@@ -273,6 +273,7 @@ async function main() {
     let polyline = L.polyline(shortestPath as L.LatLngExpression[], {
       color: "red",
       weight: 4,
+      opacity: 0.8,
     });
 
     let destination = allVertices.find((v) => v.id == to) as Vertex;
