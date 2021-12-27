@@ -204,7 +204,8 @@ async function main() {
                             calculateShortestPath(
                               from,
                               to,
-                              watchCallbackCount++ == 0
+                              watchCallbackCount++ == 0,
+                              position.coords
                             );
                             console.log(watchCallbackCount);
                           }
@@ -261,7 +262,8 @@ async function main() {
   function calculateShortestPath(
     from: number,
     to: number,
-    zoomToLine: boolean
+    zoomToLine: boolean,
+    userLocation?: GeolocationCoordinates
   ) {
     pathLayerGroup.clearLayers();
 
@@ -278,25 +280,61 @@ async function main() {
 
     let destination = allVertices.find((v) => v.id == to) as Vertex;
 
-    let circle1 = L.circle([destination.y, destination.x], {
+    let destinationCircle1 = L.circle([destination.y, destination.x], {
       color: "transparent",
       fillColor: "red",
       fillOpacity: 0.6,
       radius: 4,
     });
 
-    let circle2 = L.circle([destination.y, destination.x], {
+    let destinationCircle2 = L.circle([destination.y, destination.x], {
       color: "transparent",
       fillColor: "red",
       fillOpacity: 0.5,
       radius: 6,
     });
 
+    if (userLocation) {
+      let userCircle1 = L.circle(
+        [userLocation.latitude, userLocation.longitude],
+        {
+          color: "transparent",
+          fillColor: "#15f",
+          fillOpacity: 0.3,
+          radius: userLocation.accuracy,
+        }
+      );
+
+      let userCircle2 = L.circle(
+        [userLocation.latitude, userLocation.longitude],
+        {
+          color: "white",
+          radius: 0,
+          stroke: true,
+          weight: 13,
+        }
+      );
+
+      let userCircle3 = L.circle(
+        [userLocation.latitude, userLocation.longitude],
+        {
+          color: "#15f",
+          radius: 0,
+          stroke: true,
+          weight: 10,
+        }
+      );
+
+      pathLayerGroup.addLayer(userCircle1);
+      pathLayerGroup.addLayer(userCircle2);
+      pathLayerGroup.addLayer(userCircle3);
+    }
+
     layersControl.removeLayer(pathLayerGroup);
 
     pathLayerGroup.addLayer(polyline);
-    pathLayerGroup.addLayer(circle1);
-    pathLayerGroup.addLayer(circle2);
+    pathLayerGroup.addLayer(destinationCircle1);
+    pathLayerGroup.addLayer(destinationCircle2);
     layersControl.addOverlay(pathLayerGroup, "Suggested Path");
 
     if (zoomToLine) {

@@ -53,7 +53,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
 };
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        function calculateShortestPath(from, to, zoomToLine) {
+        function calculateShortestPath(from, to, zoomToLine, userLocation) {
             pathLayerGroup.clearLayers();
             var shortestPath = dijkstra(allVertices, from, to).map(function (value) { return [
                 value.y,
@@ -65,22 +65,45 @@ function main() {
                 opacity: 0.8,
             });
             var destination = allVertices.find(function (v) { return v.id == to; });
-            var circle1 = L.circle([destination.y, destination.x], {
+            var destinationCircle1 = L.circle([destination.y, destination.x], {
                 color: "transparent",
                 fillColor: "red",
                 fillOpacity: 0.6,
                 radius: 4,
             });
-            var circle2 = L.circle([destination.y, destination.x], {
+            var destinationCircle2 = L.circle([destination.y, destination.x], {
                 color: "transparent",
                 fillColor: "red",
                 fillOpacity: 0.5,
                 radius: 6,
             });
+            if (userLocation) {
+                var userCircle1 = L.circle([userLocation.latitude, userLocation.longitude], {
+                    color: "transparent",
+                    fillColor: "#15f",
+                    fillOpacity: 0.3,
+                    radius: userLocation.accuracy,
+                });
+                var userCircle2 = L.circle([userLocation.latitude, userLocation.longitude], {
+                    color: "white",
+                    radius: 0,
+                    stroke: true,
+                    weight: 13,
+                });
+                var userCircle3 = L.circle([userLocation.latitude, userLocation.longitude], {
+                    color: "#15f",
+                    radius: 0,
+                    stroke: true,
+                    weight: 10,
+                });
+                pathLayerGroup.addLayer(userCircle1);
+                pathLayerGroup.addLayer(userCircle2);
+                pathLayerGroup.addLayer(userCircle3);
+            }
             layersControl.removeLayer(pathLayerGroup);
             pathLayerGroup.addLayer(polyline);
-            pathLayerGroup.addLayer(circle1);
-            pathLayerGroup.addLayer(circle2);
+            pathLayerGroup.addLayer(destinationCircle1);
+            pathLayerGroup.addLayer(destinationCircle2);
             layersControl.addOverlay(pathLayerGroup, "Suggested Path");
             if (zoomToLine) {
                 map.fitBounds(polyline.getBounds());
@@ -207,7 +230,7 @@ function main() {
                                                     var to = Number(toSelector.value);
                                                     if (!Number.isNaN(from) && !Number.isNaN(to)) {
                                                         console.log(watchCallbackCount);
-                                                        calculateShortestPath(from, to, watchCallbackCount++ == 0);
+                                                        calculateShortestPath(from, to, watchCallbackCount++ == 0, position.coords);
                                                         console.log(watchCallbackCount);
                                                     }
                                                 }, function (error) {
