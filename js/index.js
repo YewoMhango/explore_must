@@ -145,10 +145,17 @@ function main() {
                     namedLocations = geojsonData.features.filter(function (val) { return val.properties.name !== null; });
                     importantLocations = namedLocations.map(function (value) {
                         var _a = popupConfigData[value.properties.name], fullName = _a.fullName, image = _a.image, description = _a.description;
-                        return L.marker([
-                            value.geometry.coordinates[1],
-                            value.geometry.coordinates[0],
-                        ]).bindPopup("<img src=\"./images/" + (image == "" ? "no picture yet.svg" : image) + "\"><h2>" + fullName + "</h2><p>" + description + "</p>");
+                        return L.marker([value.geometry.coordinates[1], value.geometry.coordinates[0]], {
+                            icon: L.icon({
+                                iconUrl: "./images/marker-icon.png",
+                                shadowUrl: "./images/marker-shadow.png",
+                                iconSize: [25, 41],
+                                shadowSize: [41, 41],
+                                iconAnchor: [13, 41],
+                                shadowAnchor: [13, 41],
+                                popupAnchor: [0, -41], // point from which the popup should open relative to the iconAnchor
+                            }),
+                        }).bindPopup("<img src=\"./images/" + (image == "" ? "no picture yet.svg" : image) + "\"><h2>" + fullName + "</h2><p>" + description + "</p>");
                     });
                     console.log(importantLocations);
                     L.tileLayer("http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}", {

@@ -56,10 +56,20 @@ async function main() {
       value.properties.name as string
     ] as PopupConfigDataValue;
 
-    return L.marker([
-      value.geometry.coordinates[1],
-      value.geometry.coordinates[0],
-    ]).bindPopup(
+    return L.marker(
+      [value.geometry.coordinates[1], value.geometry.coordinates[0]],
+      {
+        icon: L.icon({
+          iconUrl: "./images/marker-icon.png",
+          shadowUrl: "./images/marker-shadow.png",
+          iconSize: [25, 41], // size of the icon
+          shadowSize: [41, 41], // size of the shadow
+          iconAnchor: [13, 41], // point of the icon which will correspond to marker's location
+          shadowAnchor: [13, 41], // the same for the shadow
+          popupAnchor: [0, -41], // point from which the popup should open relative to the iconAnchor
+        }),
+      }
+    ).bindPopup(
       `<img src="./images/${
         image == "" ? "no picture yet.svg" : image
       }"><h2>${fullName}</h2><p>${description}</p>`
